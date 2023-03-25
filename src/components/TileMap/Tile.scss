@@ -1,0 +1,29 @@
+.tile-map {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    width: 1000px;
+    height: 500px;
+    .tile {
+        width: calc(100% * (1 / 16));
+        height: 100%;
+        background-color: green;
+        transition: all 0.3s ease-in-out;
+        padding: 5px;
+        box-sizing: border-box;
+        &:hover {
+            background-color: red;
+            cursor: pointer;
+        }
+        &__empty {
+            background-color: transparent;
+            &:hover {
+                background-color: transparent;
+            }
+        }
+    }
+    .row {
+        display: flex;
+        width: 100%;
+    }
+}
