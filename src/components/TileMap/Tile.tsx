@@ -3,6 +3,7 @@ import interpolate from 'color-interpolate';
 import React from 'react';
 
 import './Tile.scss';
+import TileTooltip from './TileTooltip';
 
 type Props = {
     short: string;
@@ -10,14 +11,22 @@ type Props = {
     value: number;
 };
 
-const colormap = interpolate(['#002B5B', '#57C5B6']);
+const colormap = interpolate(['#FFD966', '#57C5B6']);
 
 export default function Tile({ short, name, value }: Props) {
     return (
         <>
-            <Tooltip title='Amazon, 300' variant='solid' placement='top-start'>
+            <Tooltip
+                title={
+                    <React.Fragment>
+                        <TileTooltip />
+                    </React.Fragment>
+                }
+                variant='solid'
+                placement='top-start'
+            >
                 <div className='tile' style={{ backgroundColor: colormap(value) }}>
-                    <Typography level='h5'>{short}</Typography>
+                    <Typography level='h6'>{short}</Typography>
                 </div>
             </Tooltip>
         </>

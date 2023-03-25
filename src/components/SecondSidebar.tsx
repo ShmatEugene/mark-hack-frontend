@@ -15,7 +15,54 @@ import { closeSidebar } from '../utils';
 import './SeconSidebar.scss';
 import { Link } from 'react-router-dom';
 
+export interface ILink {
+    label: string;
+    link: string;
+}
+
+const links: ILink[] = [
+    {
+        label: 'Таблица товаров',
+        link: '/home',
+    },
+    {
+        label: 'Карта',
+        link: '/map',
+    },
+    {
+        label: 'Предикт',
+        link: '/predict',
+    },
+];
+
 export default function SecondSidebar() {
+    const [activeLink, setActiveLink] = React.useState(0);
+
+    const renderLinks = (links: ILink[]) => {
+        return links.map((link, index) => (
+            <Link
+                onClick={() => {
+                    setActiveLink(index);
+                }}
+                to={link.link}
+                style={{ textDecoration: 'none' }}
+            >
+                <ListItem>
+                    <ListItemButton
+                        selected={activeLink === index}
+                        variant={activeLink === index ? 'soft' : 'plain'}
+                        onClick={() => closeSidebar()}
+                    >
+                        <ListItemDecorator>
+                            <i data-feather='activity' />
+                        </ListItemDecorator>
+                        <ListItemContent>{link.label}</ListItemContent>
+                    </ListItemButton>
+                </ListItem>
+            </Link>
+        ));
+    };
+
     return (
         <React.Fragment>
             <Box
@@ -72,34 +119,7 @@ export default function SecondSidebar() {
                     {/* <ListSubheader role='presentation' sx={{ color: 'text.primary' }}>
                         Dashboard
                     </ListSubheader> */}
-                    <Link to={'/home'} style={{ textDecoration: 'none' }}>
-                        <ListItem>
-                            <ListItemButton selected variant='soft' onClick={() => closeSidebar()}>
-                                <ListItemDecorator>
-                                    <i data-feather='activity' />
-                                </ListItemDecorator>
-                                <ListItemContent>Таблица товаров</ListItemContent>
-                            </ListItemButton>
-                        </ListItem>
-                    </Link>
-                    <Link to={'/map'} style={{ textDecoration: 'none' }}>
-                        <ListItem>
-                            <ListItemButton onClick={() => closeSidebar()}>
-                                <ListItemDecorator>
-                                    <i data-feather='bell' />
-                                </ListItemDecorator>
-                                <ListItemContent>Карта</ListItemContent>
-                            </ListItemButton>
-                        </ListItem>
-                    </Link>
-                    <ListItem>
-                        <ListItemButton onClick={() => closeSidebar()}>
-                            <ListItemDecorator>
-                                <i data-feather='bar-chart' />
-                            </ListItemDecorator>
-                            <ListItemContent>Предикт</ListItemContent>
-                        </ListItemButton>
-                    </ListItem>
+                    {renderLinks(links)}
                 </List>
             </Sheet>
         </React.Fragment>

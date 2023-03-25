@@ -8,6 +8,7 @@ import useScript from '../../hooks/useScript';
 import OrderTable from '../../components/OrderTable';
 import ColorSchemeToggle from '../../components/ColorSchemeToggle';
 import TileMap from '../../components/TileMap/TileMap';
+import { Tab, TabList, Tabs } from '@mui/joy';
 
 const useEnhancedEffect = typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
 
@@ -74,6 +75,14 @@ export default function Dashboard() {
                 <Typography level='h1' fontSize='xl4'>
                     Карта
                 </Typography>
+                <Box>
+                    <Tabs defaultValue={1}>
+                        <TabList>
+                            <Tab value={1}>Объем продаж</Tab>
+                            <Tab value={2}>Количество проданного товара</Tab>
+                        </TabList>
+                    </Tabs>
+                </Box>
                 <TileMap />
             </Box>
         </>

@@ -4,6 +4,7 @@
     justify-content: start;
     width: 1000px;
     height: 500px;
+    margin-top: 20px;
     .tile {
         width: calc(100% * (1 / 16));
         height: 100%;
@@ -11,6 +12,9 @@
         transition: all 0.3s ease-in-out;
         padding: 5px;
         box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         &:hover {
             background-color: red;
             cursor: pointer;
@@ -26,4 +30,18 @@
         display: flex;
         width: 100%;
     }
+}
+
+.tile-tooltip {
+    min-width: 250px;
+    padding: 10px;
+    &__title {
+        font-size: 14px !important;
+        font-weight: 600 !important;
+    }
+}
+
+.MuiTooltip-root {
+    background: #fff !important;
+    color: #000 !important;
 }
