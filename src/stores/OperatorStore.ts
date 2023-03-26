@@ -1,7 +1,13 @@
 import { observable, runInAction, makeAutoObservable } from 'mobx';
 import { AuthServiceInstanse } from '../api/AuthService';
 import { DashboardServiceInstanse } from '../api/DashboardService';
-import { IAggPrediction, IMainTableRow } from '../models/MLINterfadces';
+import {
+    IAggPrediction,
+    IMainTableRow,
+    IPopularGTINs,
+    IShopsCount,
+    IShopsGraph,
+} from '../models/MLINterfadces';
 import { IRegionsShort } from '../models/RegionsInterfaces';
 import { IAuthToken } from '../models/User';
 
@@ -17,6 +23,8 @@ export interface IOperatorStore {
     activeRegion: number;
 
     volumeAggPrediction: IAggPrediction[];
+    popularGTINS: IPopularGTINs;
+    shopsCount: IShopsCount[];
 
     mainTable: IMainTableRow[];
 
@@ -31,11 +39,14 @@ export interface IOperatorStore {
 
     // getters
     getRegionByCode(code: number): IRegionsShort;
+    getShopsGraphByRegion(region_id: number): Array<IShopsGraph>;
 
     //запросы
     fetchRegionsShort(): Promise<IRegionsShort[]>;
     fetchVolumeAggPredict(token: string): Promise<IAggPrediction[]>;
     fetchTable(token: string, from: number, cnt: number): Promise<IMainTableRow[]>;
+    fetchPopularGTINs(): Promise<IPopularGTINs>;
+    fetchShopsManufactuteCount(): Promise<IShopsCount[]>;
 }
 
 export class OperatorStore implements IOperatorStore {
@@ -44,6 +55,8 @@ export class OperatorStore implements IOperatorStore {
     isAuth: boolean;
     regionsShort: IRegionsShort[];
     tileMapType: number;
+    popularGTINS: IPopularGTINs;
+    shopsCount: IShopsCount[];
 
     isRegionActive: boolean;
     activeRegion: number;
@@ -71,6 +84,11 @@ export class OperatorStore implements IOperatorStore {
 
         this.volumeAggPrediction = [];
         this.mainTable = [];
+        this.popularGTINS = {
+            count: [],
+            gtin: [],
+        };
+        this.shopsCount = [];
     }
 
     public async login(login: string, pass: string): Promise<IAuthToken> {
@@ -122,7 +140,7 @@ export class OperatorStore implements IOperatorStore {
     public async fetchRegionsShort(): Promise<IRegionsShort[]> {
         const data = await DashboardServiceInstanse.fetchRegions();
 
-        console.log(data);
+        console.log('data regions', data);
         runInAction(() => {
             this.regionsShort = data;
         });
@@ -159,6 +177,30 @@ export class OperatorStore implements IOperatorStore {
         return data;
     }
 
+    public async fetchPopularGTINs(): Promise<IPopularGTINs> {
+        const data = await DashboardServiceInstanse.fetchPopularGTINs();
+
+        console.log(data);
+
+        runInAction(() => {
+            this.popularGTINS = data;
+        });
+
+        return data;
+    }
+
+    public async fetchShopsManufactuteCount(): Promise<IShopsCount[]> {
+        const data = await DashboardServiceInstanse.fetchShopsManufactuteCount();
+
+        console.log(data);
+
+        runInAction(() => {
+            this.shopsCount = data;
+        });
+
+        return data;
+    }
+
     public setTileMapType(type: number): void {
         runInAction(() => {
             this.tileMapType = type;
@@ -179,5 +221,23 @@ export class OperatorStore implements IOperatorStore {
         const region =
             this.regionsShort.find((x) => x.geoname_code === code) || this.regionsShort[0];
         return region;
+    }
+    getShopsGraphByRegion(region_id: number): IShopsGraph[] {
+        const region =
+            this.shopsCount.find((x) => x.geoname_code === region_id) || this.shopsCount[0];
+
+        let res: IShopsGraph[] = [];
+
+        for (let i = 0; i < region.shops_manufacturer_count_region.count.length; i++) {
+            const name = region.shops_manufacturer_count_region.month[i] + '';
+            const value = region.shops_manufacturer_count_region.count[i];
+
+            res[i] = {
+                name: name,
+                uv: value,
+            };
+        }
+
+        return res;
     }
 }

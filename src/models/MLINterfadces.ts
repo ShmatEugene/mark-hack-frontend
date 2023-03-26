@@ -15,3 +15,22 @@ export interface IMainTableRow {
     operation_type: string;
     cnt: number;
 }
+
+export interface IPopularGTINs {
+    gtin: Array<string>;
+    count: Array<number>;
+}
+
+export interface IShopsCount {
+    geoname_code: number;
+    shops_manufacturer_count_region: {
+        region_code: number;
+        month: Array<number>;
+        count: Array<number>;
+    };
+}
+
+export interface IShopsGraph {
+    uv: number;
+    name: string;
+}

@@ -167,7 +167,6 @@ const Login = observer(() => {
                                 });
                             }}
                         >
-                            <button onClick={() => navigate('/home')}>home</button>
                             <FormControl required>
                                 <FormLabel>ИНН</FormLabel>
                                 <Input placeholder='Введите логин' type='number' name='inn' />

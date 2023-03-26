@@ -21,6 +21,37 @@ import './RegionDetails.scss';
 
 type Props = {};
 
+const graphData = [
+    {
+        name: 'Page A',
+        uv: 4000,
+    },
+    {
+        name: 'Page B',
+        uv: 3000,
+    },
+    {
+        name: 'Page C',
+        uv: 2000,
+    },
+    {
+        name: 'Page D',
+        uv: 2780,
+    },
+    {
+        name: 'Page E',
+        uv: 1890,
+    },
+    {
+        name: 'Page F',
+        uv: 2390,
+    },
+    {
+        name: 'Page G',
+        uv: 3490,
+    },
+];
+
 const RegionDetails = observer(() => {
     const [open, setOpen] = React.useState(false);
     const [open2, setOpen2] = React.useState(false);
@@ -181,10 +212,13 @@ const RegionDetails = observer(() => {
                         <Box>
                             <Divider />
                             <Typography className='list-text' level='body1'>
-                                Самые популярные товары среди оффлайн покупателей для 1
-                                производителя по регионам.
+                                Количество точек, окторый продают товары конеретного производителя.
                             </Typography>
-                            <SimpleChart />
+                            <SimpleChart
+                                data={operatorStore.getShopsGraphByRegion(
+                                    operatorStore.activeRegion
+                                )}
+                            />
                         </Box>
                     )}
                 </ListItem>
@@ -222,8 +256,8 @@ const RegionDetails = observer(() => {
                                 Прогноз кол-ва продаж на месяц и суммы продаж на месяц для всех
                                 производителей (агрегированные)
                             </Typography>
-                            <SimpleChart />
-                            <SimpleChart />
+                            <SimpleChart data={graphData} />
+                            <SimpleChart data={graphData} />
                         </Box>
                     )}
                 </ListItem>
@@ -260,8 +294,8 @@ const RegionDetails = observer(() => {
                             <Typography className='list-text' level='body1'>
                                 Прогноз кол-ва продаж и суммы продаж на месяц для 1 производителя.
                             </Typography>
-                            <SimpleChart />
-                            <SimpleChart />
+                            <SimpleChart data={graphData} />
+                            <SimpleChart data={graphData} />
                         </Box>
                     )}
                 </ListItem>

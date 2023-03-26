@@ -6,8 +6,8 @@ export interface IRegionsShort {
     geoname_name: string;
     x: number;
     y: number;
-    volume_manufacturer: number;
-    volume_manufacturer_normalized: number;
-    cnt_manufacturer: number;
-    cnt_manufacturer_normalized: number;
+    sum: number;
+    norm_sum: number;
+    cnt: number;
+    cnt_norm: number;
 }

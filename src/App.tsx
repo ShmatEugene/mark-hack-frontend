@@ -44,12 +44,16 @@ const App: React.FC = observer(() => {
     const { login, logout, token, userId, ready, email } = useAuth();
     console.log(token);
 
-    const isAuthenticated = !!token;
+    const isAuthenticated = true;
     const routes = isAuthenticated ? authRoutes : nonAuthRoutes;
     const routeNames = isAuthenticated ? authRouteNames : nonAuthRouteNames;
     const defaultRouteName = isAuthenticated ? '/home' : '/login';
 
     console.log(routes);
+
+    React.useEffect(() => {
+        operatorStore.fetchShopsManufactuteCount();
+    }, []);
 
     // React.useEffect(() => {
     //     operatorStore.fetchVolumeAggPredict(token);

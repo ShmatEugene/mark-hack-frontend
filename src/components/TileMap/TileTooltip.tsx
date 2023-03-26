@@ -17,7 +17,7 @@ export default function TileTooltip({ region }: Props) {
                 <Grid item xs={6}>
                     <Typography level='body3'>объем продаж</Typography>
                     <Typography className='tile-tooltip__price' level='body2'>
-                        {region.volume_manufacturer} руб
+                        {region.sum} руб
                     </Typography>
                     {/* <Typography level='body3'>объем продаж</Typography>
                     <Typography className='tile-tooltip__price' level='body2'>
@@ -27,7 +27,7 @@ export default function TileTooltip({ region }: Props) {
                 <Grid item xs={6}>
                     <Typography level='body3'>кол-во проданных товаров</Typography>
                     <Typography className='tile-tooltip__price' level='body2'>
-                        {region.cnt_manufacturer} шт.
+                        {region.cnt} шт.
                     </Typography>
                     {/* <Typography level='body3'>объем продаж</Typography>
                     <Typography className='tile-tooltip__price' level='body2'>

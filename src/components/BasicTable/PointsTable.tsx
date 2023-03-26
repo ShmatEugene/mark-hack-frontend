@@ -1,5 +1,7 @@
 import * as React from 'react';
 import Table from '@mui/joy/Table';
+import { useStores } from '../../hooks/useStores';
+import { observer } from 'mobx-react-lite';
 
 const headers = ['Точка', 'Количество'];
 
@@ -22,7 +24,13 @@ const rows = [
     },
 ];
 
-export default function PointsTable() {
+const PointsTable = observer(() => {
+    const { operatorStore } = useStores();
+
+    React.useEffect(() => {
+        operatorStore.fetchPopularGTINs();
+    }, []);
+
     return (
         <Table
             aria-labelledby='tableTitle'
@@ -53,4 +61,6 @@ export default function PointsTable() {
             </tbody>
         </Table>
     );
-}
+});
+
+export default PointsTable;

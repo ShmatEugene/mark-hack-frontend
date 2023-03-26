@@ -21,9 +21,9 @@ const Tile = observer(({ region }: Props) => {
     const { operatorStore } = useStores();
     let color = 0;
     if (operatorStore.tileMapType === 1) {
-        color = region.volume_manufacturer_normalized;
+        color = region.norm_sum;
     } else {
-        color = region.cnt_manufacturer_normalized;
+        color = region.cnt_norm;
     }
     return (
         <>
@@ -39,7 +39,7 @@ const Tile = observer(({ region }: Props) => {
                 <div
                     className='tile'
                     style={{
-                        backgroundColor: colormap(color),
+                        backgroundColor: colormap(Math.min(color * 20, 1)),
                     }}
                     onClick={() => {
                         operatorStore.setActiveRegion(region.geoname_code);

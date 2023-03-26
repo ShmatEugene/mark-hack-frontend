@@ -40,13 +40,14 @@ for (let i = 0; i < mapHeight; i++) {
 }
 
 const TileMap: FC = observer(() => {
-    const [map, setMap] = React.useState<Array<Array<Tile>>>(initialMap);
+    const [mapT, setMap] = React.useState<Array<Array<Tile>>>(initialMap);
     const { operatorStore } = useStores();
+    console.log('regionsShort: ', operatorStore.regionsShort);
 
     React.useEffect(() => {
         operatorStore.regionsShort.forEach((value) => {
             if (value.x >= 0 && value.y >= 0) {
-                map[value.x][value.y] = {
+                mapT[value.x][value.y] = {
                     isActive: true,
                     // short: value.iso_code,
                     // name: value.name,
@@ -55,26 +56,33 @@ const TileMap: FC = observer(() => {
                 };
             }
         });
-        setMap(map);
-    }, [map, operatorStore.regionsShort]);
 
-    const renderMap = (map: Array<Array<Tile>>) => {
-        return map.map((row, i) => {
-            return (
-                <div key={i} className='row'>
-                    {row.map((tile, j) => {
-                        return tile.isActive ? (
-                            <Tile key={j} region={tile.region} />
-                        ) : (
-                            <EmptyTile />
-                        );
-                    })}
-                </div>
-            );
-        });
+        setMap(mapT);
+    }, [mapT, operatorStore.regionsShort]);
+
+    const renderMap = (maT: Array<Array<Tile>>) => {
+        console.log('map', mapT);
+        if (mapT) {
+            return mapT.map((row, i) => {
+                // console.log('row', row);
+
+                return (
+                    <div key={i} className='row'>
+                        {row &&
+                            row.map((tile, j) => {
+                                return tile.isActive ? (
+                                    <Tile key={j} region={tile.region} />
+                                ) : (
+                                    <EmptyTile />
+                                );
+                            })}
+                    </div>
+                );
+            });
+        }
     };
 
-    return <div className='tile-map'>{renderMap(map)}</div>;
+    return <div className='tile-map'>{renderMap(mapT)}</div>;
 });
 
 export default TileMap;
