@@ -83,7 +83,7 @@ class DashboardService implements IDashboardService {
 
             // const response = await axios.get(`${API_URL}/ml/volume_agg_predict`, config);
             const response = await axios.get(`${API_URL}/goods/produced`, {
-                headers: { Authorization: `Bearer ${token2}` },
+                headers: { Authorization: `Bearer ${TOKEN}` },
                 params: {
                     offset: from,
                     count: cnt,

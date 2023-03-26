@@ -16,10 +16,24 @@ import ColorSchemeToggle from '../../components/ColorSchemeToggle';
 import customTheme from '../../theme';
 import { useAuth } from '../../hooks/auth.hook';
 import { useStores } from '../../hooks/useStores';
+import { Modal, ModalClose, Sheet } from '@mui/joy';
 
 const useEnhancedEffect = typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
 
+const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
+
 export default function Dashboard() {
+    const [open, setOpen] = React.useState<boolean>(false);
     const status = useScript(`https://unpkg.com/feather-icons`);
 
     useEnhancedEffect(() => {
@@ -100,6 +114,7 @@ export default function Dashboard() {
                     <Button
                         variant='outlined'
                         color='neutral'
+                        onClick={() => setOpen(true)}
                         startDecorator={<i data-feather='table' />}
                     >
                         Загрузить CSV
@@ -107,6 +122,47 @@ export default function Dashboard() {
                 </Box>
             </Box>
             <OrderTable />
+            <Modal
+                aria-labelledby='modal-title'
+                aria-describedby='modal-desc'
+                open={open}
+                onClose={() => setOpen(false)}
+                sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            >
+                <Sheet
+                    variant='outlined'
+                    sx={{
+                        maxWidth: 500,
+                        borderRadius: 'md',
+                        p: 3,
+                        boxShadow: 'lg',
+                    }}
+                >
+                    <ModalClose
+                        variant='outlined'
+                        sx={{
+                            top: 'calc(-1/4 * var(--IconButton-size))',
+                            right: 'calc(-1/4 * var(--IconButton-size))',
+                            boxShadow: '0 2px 12px 0 rgba(0 0 0 / 0.2)',
+                            borderRadius: '50%',
+                            bgcolor: 'background.body',
+                        }}
+                    />
+                    <Typography
+                        component='h2'
+                        id='modal-title'
+                        level='h4'
+                        textColor='inherit'
+                        fontWeight='lg'
+                        mb={1}
+                    >
+                        Загрузить файл
+                    </Typography>
+                    <Typography id='modal-desc' textColor='text.tertiary'>
+                        Загрузка
+                    </Typography>
+                </Sheet>
+            </Modal>
         </>
     );
 }

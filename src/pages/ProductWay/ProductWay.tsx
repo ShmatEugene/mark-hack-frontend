@@ -8,7 +8,9 @@ import useScript from '../../hooks/useScript';
 import OrderTable from '../../components/OrderTable';
 import ColorSchemeToggle from '../../components/ColorSchemeToggle';
 import TileMap from '../../components/TileMap/TileMap';
-import { Tab, TabList, Tabs } from '@mui/joy';
+import { Divider, Tab, TabList, Tabs } from '@mui/joy';
+
+import img from '../../assets/img/way.jpg';
 
 const useEnhancedEffect = typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
 
@@ -78,6 +80,8 @@ export default function ProductWay() {
                     </Typography>
                 </div>
                 <div>Путь продукта</div>
+                <Divider />
+                <img src={img} alt='way' />
             </Box>
         </>
     );
