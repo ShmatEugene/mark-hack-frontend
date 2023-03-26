@@ -1,26 +1,61 @@
 import { observable, runInAction, makeAutoObservable } from 'mobx';
 import { AuthServiceInstanse } from '../api/AuthService';
-import { IFlightRequest } from '../models/TasksInterfaces';
+import { DashboardServiceInstanse } from '../api/DashboardService';
+import { IAggPrediction, IMainTableRow } from '../models/MLINterfadces';
+import { IRegionsShort } from '../models/RegionsInterfaces';
 import { IAuthToken } from '../models/User';
 
 export interface IOperatorStore {
     isLoading: boolean;
     authInfo: IAuthToken;
     isAuth: boolean;
+    regionsShort: IRegionsShort[];
+    tileMapType: number;
 
-    // fetchResultByData(data: ITenderInput): Promise<IModelResult>;
+    //region details
+    isRegionActive: boolean;
+    activeRegion: number;
+
+    volumeAggPrediction: IAggPrediction[];
+
+    mainTable: IMainTableRow[];
+
     login(login: string, pass: string): Promise<IAuthToken>;
     logout(): void;
     setAuth(isAuth: boolean): void;
+
+    // setters
+    setTileMapType(type: number): void;
+    setActiveRegion(type: number): void;
+    setIsRegionActive(isActive: boolean): void;
+
+    // getters
+    getRegionByCode(code: number): IRegionsShort;
+
+    //запросы
+    fetchRegionsShort(): Promise<IRegionsShort[]>;
+    fetchVolumeAggPredict(token: string): Promise<IAggPrediction[]>;
+    fetchTable(token: string, from: number, cnt: number): Promise<IMainTableRow[]>;
 }
 
 export class OperatorStore implements IOperatorStore {
     isLoading: boolean;
     authInfo: IAuthToken;
     isAuth: boolean;
+    regionsShort: IRegionsShort[];
+    tileMapType: number;
+
+    isRegionActive: boolean;
+    activeRegion: number;
+    volumeAggPrediction: IAggPrediction[];
+
+    mainTable: IMainTableRow[];
 
     constructor() {
-        makeAutoObservable(this, {});
+        makeAutoObservable(this, {
+            regionsShort: observable,
+            mainTable: observable,
+        });
 
         this.isLoading = false;
         this.isAuth = false;
@@ -28,6 +63,14 @@ export class OperatorStore implements IOperatorStore {
             token_type: '',
             access_token: '',
         };
+        this.regionsShort = [];
+        this.tileMapType = 1;
+
+        this.isRegionActive = false;
+        this.activeRegion = 77;
+
+        this.volumeAggPrediction = [];
+        this.mainTable = [];
     }
 
     public async login(login: string, pass: string): Promise<IAuthToken> {
@@ -74,5 +117,67 @@ export class OperatorStore implements IOperatorStore {
         // runInAction(() => {
         //     this.isAuth = isAuth;
         // });
+    }
+
+    public async fetchRegionsShort(): Promise<IRegionsShort[]> {
+        const data = await DashboardServiceInstanse.fetchRegions();
+
+        console.log(data);
+        runInAction(() => {
+            this.regionsShort = data;
+        });
+
+        return data;
+    }
+
+    public async fetchVolumeAggPredict(token: string): Promise<IAggPrediction[]> {
+        const data = await DashboardServiceInstanse.fetchVolumeAggPredict(token);
+
+        let groupedData = data.reduce(function (r, a) {
+            r[a.region_code] = r[a.region_code] || [];
+            r[a.region_code].push(a);
+            return r;
+        }, Object.create(null));
+
+        console.log(groupedData);
+        runInAction(() => {
+            this.volumeAggPrediction = data;
+        });
+
+        return data;
+    }
+
+    public async fetchTable(token: string, from: number, cnt: number): Promise<IMainTableRow[]> {
+        const data = await DashboardServiceInstanse.fetchTable(token, from, cnt);
+
+        console.log(data);
+
+        runInAction(() => {
+            this.mainTable = data;
+        });
+
+        return data;
+    }
+
+    public setTileMapType(type: number): void {
+        runInAction(() => {
+            this.tileMapType = type;
+        });
+    }
+    public setActiveRegion(type: number): void {
+        runInAction(() => {
+            this.activeRegion = type;
+        });
+    }
+    public setIsRegionActive(isActive: boolean): void {
+        runInAction(() => {
+            this.isRegionActive = isActive;
+        });
+    }
+
+    getRegionByCode(code: number): IRegionsShort {
+        const region =
+            this.regionsShort.find((x) => x.geoname_code === code) || this.regionsShort[0];
+        return region;
     }
 }

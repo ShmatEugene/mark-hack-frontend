@@ -9,11 +9,17 @@ import OrderTable from '../../components/OrderTable';
 import ColorSchemeToggle from '../../components/ColorSchemeToggle';
 import TileMap from '../../components/TileMap/TileMap';
 import { Tab, TabList, Tabs } from '@mui/joy';
+import RegionDetails from '../../components/RegionDetails/RegionDetails';
+import { useStores } from '../../hooks/useStores';
+import { observer } from 'mobx-react-lite';
+import { useAuth } from '../../hooks/auth.hook';
 
 const useEnhancedEffect = typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
 
-export default function Dashboard() {
+const Dashboard = observer(() => {
     const status = useScript(`https://unpkg.com/feather-icons`);
+    const { operatorStore } = useStores();
+    const { token } = useAuth();
 
     useEnhancedEffect(() => {
         // Feather icon setup: https://github.com/feathericons/feather#4-replace
@@ -23,6 +29,14 @@ export default function Dashboard() {
             feather.replace();
         }
     }, [status]);
+
+    React.useEffect(() => {
+        operatorStore.fetchRegionsShort();
+    }, [operatorStore, token]);
+
+    React.useEffect(() => {
+        operatorStore.fetchVolumeAggPredict(token);
+    }, []);
 
     return (
         <>
@@ -52,7 +66,7 @@ export default function Dashboard() {
                         Dashboard
                     </Link>
                     <Typography fontSize='inherit' variant='soft' color='primary'>
-                        Orders
+                        Карта
                     </Typography>
                 </Breadcrumbs>
                 <ColorSchemeToggle
@@ -78,13 +92,21 @@ export default function Dashboard() {
                 <Box>
                     <Tabs defaultValue={1}>
                         <TabList>
-                            <Tab value={1}>Объем продаж</Tab>
-                            <Tab value={2}>Количество проданного товара</Tab>
+                            <Tab onClick={() => operatorStore.setTileMapType(1)} value={1}>
+                                Объем продаж
+                            </Tab>
+                            <Tab onClick={() => operatorStore.setTileMapType(2)} value={2}>
+                                Количество проданного товара
+                            </Tab>
                         </TabList>
                     </Tabs>
                 </Box>
                 <TileMap />
+
+                {operatorStore.isRegionActive && <RegionDetails />}
             </Box>
         </>
     );
-}
+});
+
+export default Dashboard;

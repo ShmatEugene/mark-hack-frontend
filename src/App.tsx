@@ -34,6 +34,11 @@ import Header from './components/Header';
 import customTheme from './theme';
 import CleanDashboard from './pages/CleanDashboard/CleanDashboard';
 
+// import logo from './assets/img/cz-logo.svg';
+import bregman from './assets/img/bregman.png';
+import SimpleChart from './components/charts/SimpleChart';
+const logo: string = require('./assets/img/cz-logo.svg').default;
+
 const App: React.FC = observer(() => {
     const { operatorStore } = useStores();
     const { login, logout, token, userId, ready, email } = useAuth();
@@ -46,12 +51,15 @@ const App: React.FC = observer(() => {
 
     console.log(routes);
 
+    // React.useEffect(() => {
+    //     operatorStore.fetchVolumeAggPredict(token);
+    // }, [operatorStore, token]);
     return (
         <BrowserRouter>
             {isAuthenticated ? (
                 <>
                     <div className='header'>
-                        <Container fixed>
+                        <Container fixed maxWidth='lg'>
                             <Layout.Header>
                                 <Box
                                     sx={{
@@ -61,9 +69,11 @@ const App: React.FC = observer(() => {
                                         gap: 1.5,
                                     }}
                                 >
-                                    <Typography component='h1' fontWeight='xl'>
+                                    {/* <Typography component='h1' fontWeight='xl'>
                                         Честный знак
-                                    </Typography>
+                                    </Typography> */}
+
+                                    <img className='main-logo' alt='logo' src={logo} />
                                 </Box>
                                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1.5 }}>
                                     <div className='avatar-box'>
@@ -75,13 +85,18 @@ const App: React.FC = observer(() => {
                                                 <Typography level='body3'>Честный знак</Typography>
                                             </div>
                                         </div>
-                                        <Avatar src='./assets/img/header.png' />
+                                        <Avatar
+                                            style={{
+                                                border: '2px solid gray',
+                                            }}
+                                            src={bregman}
+                                        />
                                     </div>
                                 </Box>
                             </Layout.Header>
                         </Container>
                     </div>
-                    <Container fixed>
+                    <Container fixed maxWidth='lg'>
                         <CssVarsProvider disableTransitionOnChange theme={customTheme}>
                             <GlobalStyles
                                 styles={{

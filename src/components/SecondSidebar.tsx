@@ -14,6 +14,7 @@ import { closeSidebar } from '../utils';
 
 import './SeconSidebar.scss';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/auth.hook';
 
 export interface ILink {
     label: string;
@@ -31,12 +32,17 @@ const links: ILink[] = [
     },
     {
         label: 'Предикт',
-        link: '/predict',
+        link: '/map',
+    },
+    {
+        label: 'Путь продукта',
+        link: '/product-way',
     },
 ];
 
 export default function SecondSidebar() {
     const [activeLink, setActiveLink] = React.useState(0);
+    const { token, logout } = useAuth();
 
     const renderLinks = (links: ILink[]) => {
         return links.map((link, index) => (
@@ -120,6 +126,19 @@ export default function SecondSidebar() {
                         Dashboard
                     </ListSubheader> */}
                     {renderLinks(links)}
+
+                    <ListItem>
+                        <ListItemButton
+                            onClick={() => {
+                                logout();
+                            }}
+                        >
+                            <ListItemDecorator>
+                                <i data-feather='activity' />
+                            </ListItemDecorator>
+                            <ListItemContent>Выйти</ListItemContent>
+                        </ListItemButton>
+                    </ListItem>
                 </List>
             </Sheet>
         </React.Fragment>

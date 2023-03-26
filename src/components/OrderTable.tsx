@@ -20,106 +20,79 @@ import Sheet from '@mui/joy/Sheet';
 import Checkbox from '@mui/joy/Checkbox';
 import IconButton, { iconButtonClasses } from '@mui/joy/IconButton';
 import Typography from '@mui/joy/Typography';
+import { observer } from 'mobx-react-lite';
+import { useStores } from '../hooks/useStores';
 
 const rows = [
     {
-        id: 'INV-1234',
-        date: 'Feb 3, 2023',
-        status: 'Paid',
-        customer: {
-            initial: 'O',
-            name: 'Olivia Ryhe',
-            email: 'olivia@email.com',
-        },
-        subscription: 'Yearly',
+        dt: '2021-11-22T00:00:00',
+        gtin: 'A279061678C6BCAD8D72041BB2C0A834',
+        prid: 'DA62EC79660CF21AC37A260DA6F642C4',
+        operation_type: 'РФ',
+        cnt: 175,
     },
     {
-        id: 'INV-1233',
-        date: 'Feb 3, 2023',
-        status: 'Paid',
-        customer: {
-            initial: 'S',
-            name: 'Steve Hampton',
-            email: 'steve.hamp@email.com',
-        },
-        subscription: 'Monthly',
+        dt: '2021-11-22T00:00:00',
+        gtin: '3C31611BC8FF7AF82B6E7D8930E11CA8',
+        prid: 'DA62EC79660CF21AC37A260DA6F642C4',
+        operation_type: 'РФ',
+        cnt: 18,
     },
     {
-        id: 'INV-1232',
-        date: 'Feb 3, 2023',
-        status: 'Paid',
-        customer: {
-            initial: 'C',
-            name: 'Ciaran Murray',
-            email: 'ciaran.murray@email.com',
-        },
-        subscription: 'Yearly',
+        dt: '2021-11-22T00:00:00',
+        gtin: '4A566E6DC27A1376CC263090A77C62D8',
+        prid: 'DA62EC79660CF21AC37A260DA6F642C4',
+        operation_type: 'РФ',
+        cnt: 1,
     },
     {
-        id: 'INV-1231',
-        date: 'Feb 3, 2023',
-        status: 'Refunded',
-        customer: {
-            initial: 'M',
-            name: 'Maria Macdonald',
-            email: 'maria.mc@email.com',
-        },
-        subscription: 'Yearly',
+        dt: '2021-11-22T00:00:00',
+        gtin: '2FAFBA086E6F308987A681CD6238AE3C',
+        prid: 'DA62EC79660CF21AC37A260DA6F642C4',
+        operation_type: 'РФ',
+        cnt: 18,
     },
     {
-        id: 'INV-1230',
-        date: 'Feb 3, 2023',
-        status: 'Paid',
-        customer: {
-            initial: 'C',
-            name: 'Charles Fulton',
-            email: 'fulton@email.com',
-        },
-        subscription: 'Yearly',
+        dt: '2021-11-22T00:00:00',
+        gtin: '5D74B67E1DAC42C7526F27A6BDA73FF6',
+        prid: 'DA62EC79660CF21AC37A260DA6F642C4',
+        operation_type: 'Перемаркировка',
+        cnt: 120,
     },
     {
-        id: 'INV-1229',
-        date: 'Feb 3, 2023',
-        status: 'Cancelled',
-        customer: {
-            initial: 'J',
-            name: 'Jay Hooper',
-            email: 'hooper@email.com',
-        },
-        subscription: 'Yearly',
+        dt: '2021-11-22T00:00:00',
+        gtin: 'CD80FBB949F19044827D363A89D4B60B',
+        prid: 'DA62EC79660CF21AC37A260DA6F642C4',
+        operation_type: 'РФ',
+        cnt: 3,
     },
     {
-        id: 'INV-1228',
-        date: 'Feb 3, 2023',
-        status: 'Cancelled',
-        customer: {
-            initial: 'K',
-            name: 'Krystal Stevens',
-            email: 'k.stevens@email.com',
-        },
-        subscription: 'Monthly',
+        dt: '2022-02-03T00:00:00',
+        gtin: '91EAD5D4A1205DE123B751E9B5322BB8',
+        prid: 'DA62EC79660CF21AC37A260DA6F642C4',
+        operation_type: 'РФ',
+        cnt: 56,
     },
     {
-        id: 'INV-1227',
-        date: 'Feb 3, 2023',
-        status: 'Paid',
-        customer: {
-            initial: 'S',
-            name: 'Sachin Flynn',
-            email: 's.flyn@email.com',
-        },
-        subscription: 'Monthly',
+        dt: '2022-02-03T00:00:00',
+        gtin: '8618EE0C2EDADED7BE6EA570F34894A6',
+        prid: 'DA62EC79660CF21AC37A260DA6F642C4',
+        operation_type: 'РФ',
+        cnt: 1586,
     },
     {
-        id: 'INV-1226',
-        date: 'Feb 3, 2023',
-        status: 'Cancelled',
-        customer: {
-            initial: 'B',
-            name: 'Bradley Rosales',
-            email: 'brad123@email.com',
-        },
-        subscription: 'Monthly',
+        dt: '2022-02-03T00:00:00',
+        gtin: '8AD9201DF484BA62BFCDA93389BE2546',
+        prid: 'DA62EC79660CF21AC37A260DA6F642C4',
+        operation_type: 'РФ',
+        cnt: 1688,
+    },
+    {
+        dt: '2022-02-03T00:00:00',
+        gtin: 'D8D81404B197E7D50A7499D7064D46AC',
+        prid: 'DA62EC79660CF21AC37A260DA6F642C4',
+        operation_type: 'РФ',
+        cnt: 72,
     },
 ];
 
@@ -160,10 +133,13 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
     return stabilizedThis.map((el) => el[0]);
 }
 
-export default function OrderTable() {
+const OrderTable = observer(() => {
     const [order, setOrder] = React.useState<Order>('desc');
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [open, setOpen] = React.useState(false);
+
+    const { operatorStore } = useStores();
+
     const renderFilters = () => (
         <React.Fragment>
             <FormControl size='sm'>
@@ -225,7 +201,7 @@ export default function OrderTable() {
                     <ModalDialog aria-labelledby='filter-modal' layout='fullscreen'>
                         <ModalClose />
                         <Typography id='filter-modal' level='h2'>
-                            Filters
+                            Фильрты
                         </Typography>
                         <Divider sx={{ my: 2 }} />
                         <Sheet sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -288,8 +264,8 @@ export default function OrderTable() {
                 >
                     <thead>
                         <tr>
-                            <th style={{ width: 48, textAlign: 'center', padding: 12 }}>
-                                <Checkbox
+                            <th style={{ width: 100, textAlign: 'center', padding: 12 }}>
+                                {/* <Checkbox
                                     indeterminate={
                                         selected.length > 0 && selected.length !== rows.length
                                     }
@@ -305,9 +281,9 @@ export default function OrderTable() {
                                             : undefined
                                     }
                                     sx={{ verticalAlign: 'text-bottom' }}
-                                />
+                                /> */}
                             </th>
-                            <th style={{ width: 140, padding: 12 }}>
+                            <th style={{ width: 400, padding: 12 }}>
                                 <Link
                                     underline='none'
                                     color='primary'
@@ -325,18 +301,25 @@ export default function OrderTable() {
                                         },
                                     }}
                                 >
-                                    Invoice
+                                    GTIN
                                 </Link>
                             </th>
-                            <th style={{ width: 120, padding: 12 }}>Date</th>
-                            <th style={{ width: 120, padding: 12 }}>Status</th>
-                            <th style={{ width: 220, padding: 12 }}>Customer</th>
-                            <th style={{ width: 120, padding: 12 }}>Subscription</th>
-                            <th style={{ width: 160, padding: 12 }}> </th>
+                            <th style={{ width: 400, padding: 12 }}>PRID</th>
+                            <th style={{ width: 200, padding: 12 }}>operation_type</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {stableSort(rows, getComparator(order, 'id')).map((row) => (
+                        {rows.map((row, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>{new Date(row.dt).toDateString()}</td>
+                                    <td>{row.gtin}</td>
+                                    <td>{row.prid}</td>
+                                    <td>{row.operation_type}</td>
+                                </tr>
+                            );
+                        })}
+                        {/* {stableSort(rows, getComparator(order, 'id')).map((row) => (
                             <tr key={row.id}>
                                 <td style={{ textAlign: 'center' }}>
                                     <Checkbox
@@ -399,7 +382,7 @@ export default function OrderTable() {
                                 <td>{row.subscription}</td>
                                 <td>
                                     <Link fontWeight='lg' component='button' color='neutral'>
-                                        Archive
+                                        архив
                                     </Link>
                                     <Link
                                         fontWeight='lg'
@@ -407,11 +390,11 @@ export default function OrderTable() {
                                         color='primary'
                                         sx={{ ml: 2 }}
                                     >
-                                        Download
+                                        Загрузить
                                     </Link>
                                 </td>
                             </tr>
-                        ))}
+                        ))} */}
                     </tbody>
                 </Table>
             </Sheet>
@@ -474,4 +457,6 @@ export default function OrderTable() {
             </Box>
         </React.Fragment>
     );
-}
+});
+
+export default OrderTable;

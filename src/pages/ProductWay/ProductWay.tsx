@@ -1,25 +1,18 @@
 import * as React from 'react';
-import { CssVarsProvider } from '@mui/joy/styles';
-import GlobalStyles from '@mui/joy/GlobalStyles';
-import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import Breadcrumbs from '@mui/joy/Breadcrumbs';
 import Link from '@mui/joy/Link';
 import Typography from '@mui/joy/Typography';
 import useScript from '../../hooks/useScript';
-import FirstSidebar from '../../components/FirstSidebar';
-import SecondSidebar from '../../components/SecondSidebar';
 import OrderTable from '../../components/OrderTable';
-import Header from '../../components/Header';
 import ColorSchemeToggle from '../../components/ColorSchemeToggle';
-import customTheme from '../../theme';
-import { useAuth } from '../../hooks/auth.hook';
-import { useStores } from '../../hooks/useStores';
+import TileMap from '../../components/TileMap/TileMap';
+import { Tab, TabList, Tabs } from '@mui/joy';
 
 const useEnhancedEffect = typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
 
-export default function Dashboard() {
+export default function ProductWay() {
     const status = useScript(`https://unpkg.com/feather-icons`);
 
     useEnhancedEffect(() => {
@@ -30,12 +23,6 @@ export default function Dashboard() {
             feather.replace();
         }
     }, [status]);
-
-    const { operatorStore } = useStores();
-    const { token } = useAuth();
-    React.useEffect(() => {
-        operatorStore.fetchTable(token, 0, 10);
-    }, []);
 
     return (
         <>
@@ -65,7 +52,7 @@ export default function Dashboard() {
                         Dashboard
                     </Link>
                     <Typography fontSize='inherit' variant='soft' color='primary'>
-                        Таблица товаров
+                        Путь продукта
                     </Typography>
                 </Breadcrumbs>
                 <ColorSchemeToggle
@@ -85,28 +72,13 @@ export default function Dashboard() {
                     },
                 }}
             >
-                <Typography level='h1' fontSize='xl4'>
-                    Товары
-                </Typography>
-                <Box sx={{ flex: 999 }} />
-                <Box sx={{ display: 'flex', gap: 1, '& > *': { flexGrow: 1 } }}>
-                    {/* <Button
-                        variant='outlined'
-                        color='neutral'
-                        startDecorator={<i data-feather='download-cloud' />}
-                    >
-                        Download PDF
-                    </Button> */}
-                    <Button
-                        variant='outlined'
-                        color='neutral'
-                        startDecorator={<i data-feather='table' />}
-                    >
-                        Загрузить CSV
-                    </Button>
-                </Box>
+                <div>
+                    <Typography level='h1' fontSize='xl4'>
+                        Путь продукта
+                    </Typography>
+                </div>
+                <div>Путь продукта</div>
             </Box>
-            <OrderTable />
         </>
     );
 }
